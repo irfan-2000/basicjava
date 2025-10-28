@@ -17,5 +17,11 @@ class Generics {
         // String type
         GetStudent<String> gs = new GetStudent<String>();
         System.out.println(gs.getStudent("REG123"));
+
+
+        Long t = 1L;
+
+        Integer ji = 2;
+
     }
 }
