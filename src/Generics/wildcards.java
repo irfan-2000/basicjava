@@ -1,46 +1,94 @@
+package Generics;
+
 import java.util.*;
 
-class Person {
-    public String toString() { return "Person"; }
+// 🏪 JYXKART example classes
+class Product {
+    @Override
+    public String toString()
+    {
+        return "Generic Product";
+    }
 }
 
-class Employee extends Person {
-    public String toString() { return "Employee"; }
+class Electronics extends Product
+{
+    @Override
+    public String toString() {
+        return "Electronics Item";
+    }
 }
 
-class Manager extends Employee {
-    public String toString() { return "Manager"; }
+class Mobile extends Electronics
+{
+    @Override
+    public String toString() {
+        return "Mobile Phone";
+    }
 }
 
-public class WildcardExample {
+ class JyxKartGenericsDemo
+ {
 
-    public static <T> void copyList(List<? extends T> src, List<? super T> dest) {
-        for (T item : src) {
-            dest.add(item);  // ✅ Allowed — we can add T items to super of T
+    // ✅ This method only READS (Producer)
+    static void printProducts(List<? extends Product> products) {
+        System.out.println("Printing products...");
+        for (Product p : products) {
+            System.out.println(" - " + p);
         }
 
-        // ❌ dest.add(src.get(0));  // Not allowed, because src.get(0) is ? extends T, not exactly T
-        // ❌ src.add(null);         // Not allowed — can't add anything to extends list except null
+        // ❌ X: Not allowed to add because list could be List<Mobile>, List<Electronics>, etc.
+        // products.add(new Mobile());  // Compile error
+    }
 
-        // ✅ You can read from src safely as T:
-        T element = src.get(0);
+    // ✅ This method only WRITES (Consumer)
+   // (List<? super Mobile> list) a list that can store Mobile objects or objects of any superclass of Mobile, like Electronic or Object.every class implicitly extends Object
+    static void addMobiles(List<? super Mobile> list) {
+        System.out.println("\nAdding mobiles...");
 
-        // ❌ You cannot assume the type when reading from dest:
-        // T element2 = dest.get(0); // Compile error
+        list.add(new Mobile());     // ✅ Allowed — we can always add a Mobile
+        list.add(new Mobile());     // ✅ Another Mobile
+
+        // ❌ X: Reading as Mobile is not safe; the list could be List<Product> or List<Object>
+        // Mobile m = list.get(0);   // Compile error
+        Object o = list.get(0);
+        // ✅ Only safe to read as Object
+        System.out.println("Read as Object: " + o);
+        System.out.println("Read as Object: " + list.get(1));
+
+
     }
 
     public static void main(String[] args) {
-        List<Manager> managers = Arrays.asList(new Manager(), new Manager());
-        List<Employee> employees = new ArrayList<>();
-        List<Person> persons = new ArrayList<>();
 
-        // ✅ Valid combinations:
-        copyList(managers, employees);  // Manager → Employee (extends/super ok)
-        copyList(managers, persons);    // Manager → Person
-        copyList(employees, persons);   // Employee → Person
+        List<Mobile> mobileList = new ArrayList<>();
+        mobileList.add(new Mobile());
+        mobileList.add(new Mobile());
 
-        // ❌ Invalid combinations:
-        // copyList(persons, employees); // X — Person not extends Employee
-        // copyList(employees, managers); // X — Employee not extends Manager
+        List<Electronics> electronicsList = new ArrayList<>();
+        electronicsList.add(new Electronics());
+
+        List<Product> productList = new ArrayList<>();
+        productList.add(new Product());
+
+        // -------------------------------
+        // ✅ Scenario 1: Reading (extends)
+        // -------------------------------
+        System.out.println("=== Scenario 1: Reading ===");
+        printProducts(mobileList);       // OK - List<Mobile>
+        printProducts(electronicsList);  // OK - List<Electronics>
+        printProducts(productList);      // OK - List<Product>
+
+        // ❌ X: Can't write inside printProducts() because of '? extends Product'
+
+        // -------------------------------
+        // ✅ Scenario 2: Writing (super)
+        // -------------------------------
+        System.out.println("\n=== Scenario 2: Writing ===");
+        addMobiles(mobileList);      // OK - exact type
+        addMobiles(electronicsList); // OK - parent type
+        addMobiles(productList);     // OK - even higher parent type
+
+        // ❌ X: Can't read as Mobile inside addMobiles() because '? super Mobile' may be Product/Object list
     }
 }
