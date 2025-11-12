@@ -28,7 +28,7 @@ public class Demo
 
         //using streams
 
-        List<String> result = names.stream()
+        List<String> result1 = names.stream()
                         .filter((String val) -> val.charAt(0) == 'A')
                          .sorted(String::compareTo)
                             .toList();

@@ -24,7 +24,7 @@ class Mobile extends Electronics {
     }
 }
 
-public class JyxKartGenericsDemo {
+  class JyxKartGenericsDemo {
 
     // ✅ This method only READS (Producer)
     static void printProducts(List<? extends Product> products) {

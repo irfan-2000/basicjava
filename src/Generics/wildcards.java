@@ -3,7 +3,7 @@ package Generics;
 import java.util.*;
 
 // 🏪 JYXKART example classes
-class Product {
+class Product_j {
     @Override
     public String toString()
     {
@@ -11,7 +11,7 @@ class Product {
     }
 }
 
-class Electronics extends Product
+class Electronics_j extends Product
 {
     @Override
     public String toString() {
@@ -19,7 +19,7 @@ class Electronics extends Product
     }
 }
 
-class Mobile extends Electronics
+class Mobile_j extends Electronics
 {
     @Override
     public String toString() {
@@ -27,7 +27,7 @@ class Mobile extends Electronics
     }
 }
 
- class JyxKartGenericsDemo
+   class JyxKartGenericsDemo_j
  {
 
     // ✅ This method only READS (Producer)
